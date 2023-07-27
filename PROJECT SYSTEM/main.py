@@ -11,7 +11,6 @@ import time
 
 origin = Tk()
 
-loadinganimation()
 
 
 
