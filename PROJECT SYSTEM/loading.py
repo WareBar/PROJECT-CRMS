@@ -5,6 +5,7 @@ import customtkinter as MD
 from PIL import ImageTk, Image
 import time
 from tkinter import ttk
+from tkvideo import tkvideo
 
 #LOADINNG ANIMATION
 origin = Tk()
@@ -109,29 +110,58 @@ while start < 5:
 
 origin.withdraw()
 LogSign = Toplevel()
-LogSign.geometry("700x550+550+150")
-LogSign.overrideredirect(1)
+LogSign.geometry("1200x700")
+#LogSign.overrideredirect(1)
 LogSign.config(bg="#141414")
 
 
+#LOGO
+uplogo = Image.open("photos\maininlogo.png")
+uplogo = uplogo.resize((50,50), Image.LANCZOS)
+uplogo = ImageTk.PhotoImage(uplogo)
 
 
 
-btn = Image.open("photos/logo.png")
-btn = btn.resize((250, 250), Image.LANCZOS)
-btn = ImageTk.PhotoImage(btn)
-systemlogo = Label(LogSign, image=btn, bg="#141414")
-systemlogo.place(x=225, y=80)
+upframe = Frame(LogSign, width=1200, height=50, bg="#545454")
+upframe.place(x=0, y=0)
 
-loginbtn = MD.CTkButton(LogSign, text="LOG IN", font=(("Plantagenet Cherokee",16,"bold")), bg_color="Grey",fg_color="Grey",hover_color="Black",corner_radius=0,command=lambda:slideleft())
-loginbtn.place(x=285, y=340)
+mainlogo = Label(upframe, image=uplogo, bg="#545454")
+mainlogo.place(x=10, y=0)
 
-signupbtn = MD.CTkButton(LogSign, text="SIGN UP", font=(("Plantagenet Cherokee",16,"bold")), bg_color="Grey",fg_color="Grey",hover_color="Black",corner_radius=0,command=lambda:slidedown())
-signupbtn.place(x=285, y=380)
+uplabel = Label(upframe, text="CRIME RECORD MANAGEMENT SYSTEM", bg="#545454", fg="#D9D9D9",font=("Agency FB", 20, "bold"))
+uplabel.place(x=60, y=4)
+
+uplogintbn = MD.CTkButton(upframe, text="LOGIN", width=5,fg_color="#545454",font=("Agency FB", 30, "bold"), command=lambda:slideleft())
+uplogintbn.place(relx=0.85, y=4)
+
+upsignupbtn = MD.CTkButton(upframe, text="SIGNUP", width=5,fg_color="#545454",font=("Agency FB", 30, "bold"), command=lambda:slidedown())
+upsignupbtn.place(relx=0.92, y=4)
 
 
-x_axis = 700
-login = MD.CTkFrame(LogSign, height=400, width=350, bg_color="#141414",fg_color="#D9D9D9",corner_radius=15)
+#frame to contain the video
+vidframe = Frame(LogSign, width=1200, height=650,bg="#545454")
+vidframe.place(x=-4, y=50)
+
+a = Label(vidframe,bg="#545454")
+a.pack()
+
+video = tkvideo("intro_vid.mp4", a, loop=True, size=(1209, 650))
+video.play()
+
+
+a = Label(LogSign, text="INDICATOR")
+a.place(x=1200, y=500)
+
+
+
+
+
+
+
+
+
+x_axis = 1300
+login = MD.CTkFrame(LogSign, height=400, width=350, bg_color="#141414",fg_color="#D9D9D9",corner_radius=0)
 login.place(x=x_axis, y=70)
 
 
@@ -145,8 +175,8 @@ c = Entry(login, width=37, bd=0, show="*", font=("Ariel", 10, "bold"), bg="#D9D9
 c.place(relx=0.12, rely=0.5, relheight=0.08)
 
 """
-d = ttk.Checkbutton(login, text="Remember me")
-d.place(x=32, y=240)
+#d = ttk.Checkbutton(login, text="Remember me")
+#d.place(x=32, y=240)
 """
 e = MD.CTkButton(login, text="LOG IN", font=("Corbel", 16,"bold"), width=272, hover_color="Red", fg_color="#61777B",bg_color="White",corner_radius=0,command=lambda:interface())
 e.place(relx=0.1, rely=0.7, relheight=0.08)
@@ -269,18 +299,18 @@ c.bind("<Leave>", anotheranimation)
 
 def slideleft():
     global x_axis
-    if x_axis != 340:
+    if x_axis != 820:
         x_axis -= 20
         login.place(x=x_axis, y=70)
-        if x_axis > 340:
+        if x_axis > 820:
             LogSign.after(10, slideleft)
 
 def slideright():
     global x_axis
-    if x_axis != 700:
+    if x_axis != 1300:
         x_axis += 20
         login.place(x=x_axis, y=70)
-        if x_axis < 700:
+        if x_axis < 1300:
             LogSign.after(10, slideright)
 #_---------------------------------------------------ABOVE ANIMATION FOR FRAMES----------------------------------------
 
@@ -289,15 +319,15 @@ def slideright():
 #--------------------------------------------BELOW ANIMATION FOR SIGNUP PANEL AND WIDGETS------------------------------
 
 negCor=-400
-signup = MD.CTkFrame(LogSign, width=650, height=400, bg_color="#141414",fg_color="#D9D9D9",corner_radius=15)
+signup = MD.CTkFrame(LogSign, width=650, height=400, bg_color="#141414",fg_color="#D9D9D9",corner_radius=0)
 #hide
-signup.place(x=25, y=negCor)
+signup.place(x=500, y=negCor)
 
 #show
 #signup.place(x=0, y=negCor)
 
 
-FRAME = MD.CTkScrollableFrame(signup, width=605, height=350, bg_color="#D9D9D9", fg_color="#D9D9D9",corner_radius=20)
+FRAME = MD.CTkScrollableFrame(signup, width=605, height=350, bg_color="#D9D9D9", fg_color="#D9D9D9",corner_radius=0)
 FRAME.place(x=4, y=4)
 
 CANVAS = Canvas(FRAME, width=620, height=600, highlightbackground="#D9D9D9", background="#D9D9D9")
@@ -725,7 +755,7 @@ def slidedown():
     
     if negCor != 60:
         negCor+=20
-        signup.place(x=25, y=negCor)
+        signup.place(x=500, y=negCor)
         if negCor  < 60:
             LogSign.after(10, slidedown)
 
@@ -733,7 +763,7 @@ def slideup():
     global negCor
     if negCor != -400:
         negCor -=20
-        signup.place(x=25, y=negCor)
+        signup.place(x=500, y=negCor)
         if negCor > -400:
             LogSign.after(10, slideup)
 
@@ -764,8 +794,6 @@ cancelregister.place(x=row2, y=450, relwidth=0.41,relheight=entry_height)
 def interface():
     global maininterface
     maininterface = Toplevel()
-
-
 
 
 
