@@ -9,6 +9,7 @@ from tkvideo import tkvideo
 from openpyxl import load_workbook
 from openpyxl import *
 from tkinter import messagebox
+from functools import partial
 
 
 #LOADINNG ANIMATION
@@ -37,10 +38,6 @@ systemlogo.place(x=170, y=20)
 
 title = Label(origin, text="C R M S", fg="#004FFF", bg="#141414", font=("Valorant", 20))
 title.place(x=193, y=160)
-
-
-#line = Label(origin, text="_______", fg="#004FFF", bg="#141414", font=(20,20,))
-#line.place(x=193, y=10, relheight=0.0)
 
 dot1 = Image.open("photos/loaddots/4.png")
 dot1 = dot1.resize((20,20), Image.LANCZOS)
@@ -120,7 +117,7 @@ LogSign.config(bg="#141414")
 
 
 #LOGO
-uplogo = Image.open("photos\maininlogo.png")
+uplogo = Image.open("photos\main_in_logo.png")
 uplogo = uplogo.resize((50,50), Image.LANCZOS)
 uplogo = ImageTk.PhotoImage(uplogo)
 
@@ -138,7 +135,7 @@ uplabel.place(x=60, y=4)
 uplogintbn = MD.CTkButton(upframe, text="LOGIN", width=5,fg_color="#545454",font=("Agency FB", 30, "bold"), command=lambda:slideleft())
 uplogintbn.place(relx=0.85, y=4)
 
-upsignupbtn = MD.CTkButton(upframe, text="SIGNUP", width=5,fg_color="#545454",font=("Agency FB", 30, "bold"), command=lambda:slidedown())
+upsignupbtn = MD.CTkButton(upframe, text="SIGNUP", width=5,fg_color="#545454",font=("Agency FB", 30, "bold"), command=lambda:sign_slide_left())
 upsignupbtn.place(relx=0.92, y=4)
 
 
@@ -178,21 +175,15 @@ b.place(relx=0.12, rely=0.3, relheight=0.08)
 c = Entry(login, width=37, bd=0, font=("Ariel", 10, "bold"), show="*",bg="#D9D9D9")
 c.place(relx=0.12, rely=0.5, relheight=0.08)
 
-"""
-#d = ttk.Checkbutton(login, text="Remember me")
-#d.place(x=32, y=240)
-"""
+
 e = MD.CTkButton(login, text="LOG IN", font=("Corbel", 16,"bold"), width=272, hover_color="Red", fg_color="#61777B",bg_color="White",corner_radius=0,command=lambda:gate())
 e.place(relx=0.1, rely=0.7, relheight=0.08)
 
 f = MD.CTkButton(login, text="Cancel", font=("Corbel", 16), width=272, hover_color="Red", bg_color="White",corner_radius=0,command=lambda:slideright())
 f.place(relx=0.1, rely=0.8, relheight=0.08)
 
-g = MD.CTkButton(login, text="Forgot password?", font=("Corbel", 10), width=272, hover_color="Red", text_color="Black",fg_color="#D9D9D9",bg_color="#D9D9D9",corner_radius=0)
-g.place(relx=0.1, rely=0.9, relheight=0.08)
 
-#g = Label(login, text="Don't have an account? Register", font=("Ariel", 10), bg="White")
-#g.place(relx=0.2, rely=0.9)
+
 
 linesimg = Image.open("photos/linya.PNG")
 lineimg = linesimg.resize((270,2), Image.LANCZOS)
@@ -302,14 +293,18 @@ c.bind("<Leave>", anotheranimation)
 #ANIMATE THE FRAME
 
 def slideleft():
-    global x_axis
-    if x_axis != 820:
-        x_axis -= 20
-        login.place(x=x_axis, y=70)
-        if x_axis > 820:
-            LogSign.after(10, slideleft)
+    if negCor == 500:
+        print("RETRACT THE SIGNUP FRAME FIRST")
+    else:
+        global x_axis
+        if x_axis != 820:
+            x_axis -= 20
+            login.place(x=x_axis, y=70)
+            if x_axis > 820:
+                LogSign.after(10, slideleft)
 
 def slideright():
+
     global x_axis
     if x_axis != 1300:
         x_axis += 20
@@ -322,10 +317,10 @@ def slideright():
 
 #--------------------------------------------BELOW ANIMATION FOR SIGNUP PANEL AND WIDGETS------------------------------
 
-negCor=-400
+negCor=1200
 signup = MD.CTkFrame(LogSign, width=650, height=400, bg_color="#141414",fg_color="#D9D9D9",corner_radius=0)
 #hide
-signup.place(x=500, y=negCor)
+signup.place(x=negCor, y=70)
 
 #show
 #signup.place(x=0, y=negCor)
@@ -631,7 +626,11 @@ def phone_label_animation(event):
     global phone_label_indicator
     phone_label_indicator+=1
     if (phone_label_indicator % 2) == 0:
-        phone_down()
+        if len(phonenumber.get()) > 0:
+            1+1
+            #do nothing
+        else:
+            phone_down()
     else:
         phone_up()
 
@@ -754,22 +753,25 @@ zipcode.bind("<Enter>", Zcode_animation)
 zipcode.bind("<Leave>", Zcode_animation)
 
 #ANIMATE THE FRAME CONTAINER
-def slidedown():
-    global negCor
-    
-    if negCor != 60:
-        negCor+=20
-        signup.place(x=500, y=negCor)
-        if negCor  < 60:
-            LogSign.after(10, slidedown)
+def sign_slide_left():
+    if x_axis == 820:
+        print("RETRACT THE LOGIN FRAME FIRST")
+    else:
+        global negCor
+        if negCor != 500:
+            negCor -= 20
+            signup.place(x=negCor, y=70)
+            if negCor > 500:
+                LogSign.after(10, sign_slide_left)
 
-def slideup():
+
+def sign_slide_right():
     global negCor
-    if negCor != -400:
-        negCor -=20
-        signup.place(x=500, y=negCor)
-        if negCor > -400:
-            LogSign.after(10, slideup)
+    if negCor != 1200:
+        negCor +=20
+        signup.place(x=negCor, y=70)
+        if negCor < 1200:
+            LogSign.after(10, sign_slide_right)
 
 
 #----------------------------------------ZIPCODE LABEL LABEL ANIMATION ABOVE-------------------------------------------------
@@ -782,7 +784,7 @@ def slideup():
 register = MD.CTkButton(CANVAS, text="REGISTER", font=("Agency FB", 30, "bold"),text_color="Black",fg_color="#61777B",corner_radius=0,command=lambda:put_in_db())
 register.place(x=row1, y=450, relwidth=0.41,relheight=entry_height)
 
-cancelregister = MD.CTkButton(CANVAS, text="CANCEL", font=("Agency FB", 30, "bold"),text_color="Black",fg_color="#61777B",corner_radius=0,command=lambda:slideup())
+cancelregister = MD.CTkButton(CANVAS, text="CANCEL", font=("Agency FB", 30, "bold"),text_color="Black",fg_color="#61777B",corner_radius=0,command=lambda:sign_slide_right())
 cancelregister.place(x=row2, y=450, relwidth=0.41,relheight=entry_height)
 
 
@@ -794,59 +796,14 @@ cancelregister.place(x=row2, y=450, relwidth=0.41,relheight=entry_height)
 
 #--------------------------------------------ABOVE ANIMATION FOR SIGNUP PANEL AND WIDGETS------------------------------
 
-#----------------------------------------------------------------MAIN INTERFACE----------------------------------------
 
-def SYSTEM():
-    LogSign.withdraw()
-
-    CRMS = Toplevel()
-    CRMS.geometry("1200x700")
-    CRMS.config(bg="Black")
-
-
-    CRMS_LOGO = Image.open("photos/LINES.png")
-    CRMS_LOGO = CRMS_LOGO.resize((50,50), Image.ADAPTIVE)
-    CRMS_LOGO = ImageTk.PhotoImage(CRMS_LOGO)
-
-
-
-    system_upframe = Frame(CRMS, width=1200, height=50, bg="#545454")
-    system_upframe.place(x=0, y=0)
-
-    system_logo_label = Label(CRMS, image=CRMS_LOGO, bg="#545454")
-    system_logo_label.place(x=10, y=0)
-
-
-
-    system_uplabel = Label(system_upframe, text="CRIME RECORD MANAGEMENT SYSTEM", bg="#545454", fg="#D9D9D9",font=("Agency FB", 20, "bold"))
-    system_uplabel.place(x=60, y=4)
-
-
-
-    SEARCH_FRAME = Frame(CRMS, width=30, height=40, highlightbackground="Red", highlightcolor="Red", highlightthickness=2)
-    SEARCH_FRAME.place(x=15, y=50)
-
-
-#----------------------------------------------------------------MAIN INTERFACE----------------------------------------
-
-
-
-
-
-
-
-
-#-----------------------------------------------------------------FRONT END-------------------------------------------------
-
-#-----------------------------------------------------------------BACK END-------------------------------------------------
 
 #LOADING THE EXCEL IN THE PROGRAM
 book = load_workbook("CRMSDB.xlsx")
 
 #ASSIGNING THE SPREADSHEET OF CRMSDB.XLSX
-SIGN_UP = book["PENDING SIGNUP"]
 LOG_IN = book["CREDENTIALS"]
-DATABASE = book["MAIN DATA"]
+data = book["MAIN DATA"]
 
 
 
@@ -854,17 +811,20 @@ DATABASE = book["MAIN DATA"]
 def gate():
     user_id = b.get()
     pass_code = c.get()
-
+    global LOGGED_ON_USER
 
     if len(user_id) <= 0 or len(pass_code) <= 0:
         messagebox.showerror("FIELD","FILL ALL FIELDS TO LOGIN")
     else:
         found = False
         last_cell = LOG_IN.max_row
+        LOGGED_ON_USER = None
         for i in range(2, last_cell+1):
             if LOG_IN["A"+str(i)].value == user_id and LOG_IN["B"+str(i)].value == pass_code:
                 found = True
+                LOGGED_ON_USER = i
                 break
+                
             else:
                 found = False
 
@@ -872,7 +832,7 @@ def gate():
             #calls the system interface which is inside of function
             SYSTEM()
         else:
-            messagebox.showerror("WRONG CREDENTIALS")
+            messagebox.showwarning("LOGIN","WRONG CREDENTIALS")
 
 
 
@@ -900,40 +860,767 @@ def put_in_db():
 
     if len(sign_name) <= 0 or len(sign_user_id) <= 0 or len(sign_email) <= 0 or len(sign_password) <= 0 or len(sign_confirm_pass) <= 0 or len(sign_bday) <= 0 or len(sign_zip) <= 0:
         messagebox.showerror("404","FILL ALL FIELDS TO PROCEED")
-
-        messagebox.showerror("202","PASSWORD DO NOT MATCH")
-
     else:
         if sign_password != sign_confirm_pass:
             messagebox.showerror("202","PASSWORD DO NOT MATCH")
         else:
-            last_row = str(SIGN_UP.max_row+1)
+            found = "HINDI"
+            for i in range(2,LOG_IN.max_row+1):
+                if sign_user_id == LOG_IN["A"+str(i)].value or sign_name == LOG_IN["C"+str(i)].value:
+                    found = "NAHANAP"
+                    
+                
+            if found == "NAHANAP":
+                messagebox.showwarning("LOGIN","ACCOUNT ALREADY EXIST")
+            else:
+                okay_to_go = False
+                try:
+                    int(sign_phonenumber)
+                    okay_to_go = True
+                except ValueError:
+                    okay_to_go = False
 
-            all_value = ["#",sign_user_id, sign_password, sign_name,sign_phonenumber, sign_email, sign_bday, sign_zip]
-            all_column = ["#","A","B","C","D","E","F","G"]
-            for i in range(1,len(all_column)):
-                SIGN_UP[all_column[i]+last_row].value = all_value[i]
+                if okay_to_go == False:
+                    messagebox.showerror("ERROR","PHONE NUMBER SHOULD BE A NUMERIC VALUE")
+                else:
+                    last_row = str(LOG_IN.max_row+1)
+
+                    all_value = ["#",sign_user_id, sign_password, sign_name,sign_phonenumber, sign_email, sign_bday, sign_zip]
+                    all_column = ["#","A","B","C","D","E","F","G"]
+                    for i in range(1,len(all_column)):
+                        LOG_IN[all_column[i]+last_row].value = all_value[i]
+                    
+                    print("REGISTED")
+                    messagebox.showinfo("SUCCESS","REGISTERED")
+
+                    book.save("CRMSDB.xlsx")
+
+
+
+
+
+
+
+
+
+
+
+#-----------------------------------------------------------------FRONT END-------------------------------------------------
+
+
+
+
+
+#----------------------------------------------------------------MAIN INTERFACE----------------------------------------
+
+def SYSTEM():
+    LogSign.withdraw()
+
+    CRMS = Toplevel()
+    CRMS.geometry("1200x700")
+    CRMS.config(bg="Black")
+
+
+
+
+
+    system_upframe = Frame(CRMS, width=1200, height=50, bg="#545454")
+    system_upframe.place(x=0, y=0)
+
+
+    global system_logo
+    system_logo = Image.open("photos/main_in_logo.png")
+    system_logo = system_logo.resize((42,42), Image.LANCZOS)
+    system_logo = ImageTk.PhotoImage(system_logo)
+
+    CRMS_LOGO = Label(CRMS, image=system_logo, bg="#545454")
+    CRMS_LOGO.place(x=30, y=4)
+
+
+
+
+    system_uplabel = Label(system_upframe, text="CRIME RECORD MANAGEMENT SYSTEM", bg="#545454", fg="#D9D9D9",font=("Agency FB", 20, "bold"))
+    system_uplabel.place(x=80, y=4)
+
+
+
+
+    SEARCH_FRAME = MD.CTkFrame(CRMS, width=725, height=40, bg_color="#000000",fg_color="#A6A6A6",corner_radius=8)
+    SEARCH_FRAME.place(x=30, y=100)
+
+    search_box = MD.CTkEntry(SEARCH_FRAME,fg_color="#141414", text_color="White", font=("Agency FB", 20, "bold"))
+    search_box.place(x=530,y=4,relwidth=0.23,relheight=0.82)
+
+    #IMPORTING THE IMAGE
+
+    search_icon = MD.CTkImage(light_image = Image.open("photos/search_icon.png"), size=(15,15))
+
+    search_button = MD.CTkButton(SEARCH_FRAME,image=search_icon, text=None, width=5,height=10,fg_color="#141414", bg_color="#141414",hover_color="Black", command=lambda:find())
+    search_button.place(x=648, y=8,relwidth=0.06)
+
+    CASE_FRAME = MD.CTkScrollableFrame(CRMS, width=700, height=500, bg_color="#000000",fg_color="#A6A6A6",corner_radius=8)
+    CASE_FRAME.place(x=30, y=150)
+
+    INFO_FRAME = MD.CTkFrame(CRMS, width=380, height=515, bg_color="#000000",fg_color="#A6A6A6",corner_radius=8)
+    INFO_FRAME.place(x=800, y=150)
+
+
+
+    CASE_CANVAS = Canvas(CASE_FRAME, width="680", height=1200, bg="#A6A6A6")
+    CASE_CANVAS.grid_propagate(False)
+    CASE_CANVAS.grid(row=0, column=0)
+
+    add_logo = Image.open("photos/add_icon.png")
+    add_logo = add_logo.resize((70,70), Image.LANCZOS)
+    add_logo = ImageTk.PhotoImage(add_logo)
+
+
+    add_plus_case = MD.CTkButton(CRMS, text="+", font=("Ariel", 20, "bold"),width=70, height=70, hover_color="Red",fg_color="Green", bg_color="Green",corner_radius=0, command=lambda:add_case())
+    add_plus_case.place(x=600, y=550)
+
+    global avatar
+    avatar = Image.open("photos/profile.png")
+    avatar = avatar.resize((80,80), Image.LANCZOS)
+    avatar = ImageTk.PhotoImage(avatar)
+
+    profile_photo = MD.CTkLabel(CRMS, text=None,image=avatar)
+    profile_photo.place(x=920, y=55)
+
+
+
+    profile = MD.CTkButton(CRMS, text=LOG_IN["C"+str(LOGGED_ON_USER)].value, font=("Agency FB", 20, "bold"))
+    profile.place(x=1010, y=60)
+
+    log_out = MD.CTkButton(CRMS, text="LOG OUT",fg_color="Red",hover_color="Green",command=lambda:back(),corner_radius=5)
+    log_out.place(x=1010, y=100)
+
+
+    def back():
+        LogSign.deiconify()
+        CRMS.withdraw()
+
+
+
+    def add_case():
+        CASE_FILES = Frame(CRMS, width=400, height=500, bg="#545454")
+        CASE_FILES.place(x=200, y=150)
+
+        close = MD.CTkButton(CASE_FILES, text="X", width=1, font=("Ariel", 20, "bold"),fg_color="Red",hover="Black",height=1,command=lambda:CASE_FILES.place_forget())
+        close.place(x=380, y=0)
+
+        last = data.max_row + 1
+        case_number = MD.CTkLabel(CASE_FILES, text=f"CRIME CASE #{last}", font=("Agency FB", 38, "bold"), bg_color="#545454", fg_color="#D9D9D9", corner_radius=7)
+        case_number.place(x=10, y=10)
+
+        suspect_name = MD.CTkLabel(CASE_FILES, text="SUSPECT:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        suspect_name.place(x=10, y=60)
+
+
+
+        victims_name = MD.CTkLabel(CASE_FILES, text="VICTIM:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        victims_name.place(x=10, y=100)
+
+        lines = Image.open("photos/linya.PNG")
+        lines = lines.resize((350,1), Image.LANCZOS)
+        lines = ImageTk.PhotoImage(lines)
+
+        lines = Label(CASE_FILES, image=lines)
+        lines.place(x=20, y=150)   
+
+        crime_type = MD.CTkLabel(CASE_FILES, text="TYPE OF CRIMES:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        crime_type.place(x=10, y=160)
+
+        lines = Image.open("photos/linya.PNG")
+        lines = lines.resize((350,1), Image.LANCZOS)
+        lines = ImageTk.PhotoImage(lines)
+
+        lines = Label(CASE_FILES, image=lines)
+        lines.place(x=20, y=260)
+
+        occurence_location = MD.CTkLabel(CASE_FILES, text="LOCATION OF OCCURENCE:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        occurence_location.place(x=10, y=290)
+
+        occurence_date = MD.CTkLabel(CASE_FILES, text="DATE OF OCCURENCE:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        occurence_date.place(x=10, y=320)
+    
+        narrative_report = MD.CTkLabel(CASE_FILES, text="NARRATIVE REPORT:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        narrative_report.place(x=10, y=350)
+
+        box = MD.CTkTextbox(CASE_FILES, width=360, height=70,state=NORMAL)
+        box.place(x=15, y=380)
+
+        create_s_name = MD.CTkEntry(CASE_FILES,width=250,font=("Agency FB", 30, "bold"))
+        create_s_name.place(x=110, y=60, relheight=0.07)
+
+        create_v_name = MD.CTkEntry(CASE_FILES,width=250,font=("Agency FB", 30, "bold"))
+        create_v_name.place(x=110, y=100,relheight=0.07)
+
+        
+        crimes = ["Murder","Manslaughter","Assault","Robbery","Kidnapping","Rape","Domestic Violence","Burgarly","Theft","Larceny","Arson","Fraud","Identity theft","Hacking","Online Fraud"]
+        create_crimes = StringVar()
+        crimes_widget = MD.CTkOptionMenu(CASE_FILES,values=crimes, variable=create_crimes, fg_color="#545454",font=("Agency FB", 30, "bold"),corner_radius=5, button_color="Black", dropdown_fg_color="White", dropdown_font=("Agency FB", 20, "bold"))
+        crimes_widget.place(x=15, y=210,relheight=0.07)
+
+        create_location = MD.CTkEntry(CASE_FILES,width=200,font=("Agency FB", 30, "bold"))
+        create_location.place(x=190, y=290,relheight=0.07)
+
+        create_date = MD.CTkEntry(CASE_FILES,width=200,font=("Agency FB", 30, "bold"))
+        create_date.place(x=190, y=320, relheight=0.07)
+
+        create_button = MD.CTkButton(CASE_FILES, text="CREATE", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5, command=lambda:create())
+        create_button.place(x=15, y=455)
+        create_button.bind("<Button-1>", refresh)
+        #the function "refresh" is binded into the button in this way, we can execute multiple functions or command in one button by binding an event
+
+
+        cancel_button = MD.CTkButton(CASE_FILES, text="CANCEL", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5,command=lambda:CASE_FILES.place_forget())
+        cancel_button.place(x=235, y=455)
+
+        def create():
+            if len(create_s_name.get()) == 0 or len(create_v_name.get() == 0 or len(create_crimes))==0 or len(create_location.get())==0 or len(create_date.get())==0 or len(box.get(1.0,END)==0):
+                messagebox.showerror("ERROR","FILL ALL FIELDS")
             
-            print("REGISTED")
-            messagebox.showinfo("SUCCESS","REGISTERED")
+            else:
+                values_to_create = [last, create_s_name.get(), create_v_name.get(), create_crimes.get(), create_location.get(), create_date.get()]
+                columns = ["A","B","C","D","E","F"]
+                for i in range(len(values_to_create)):
+                    data[columns[i]+str(last)].value = values_to_create[i]
 
-            book.save("CRMSDB.xlsx")
+                narrative_info = box.get(1.0, END)
+                data["G"+str(last)].value = narrative_info
 
-
-
-
-    #if len(sign_name)<=0 and len:
-
-
-
-######################SIGNUP
+                book.save("CRMSDB.xlsx")
+                messagebox.showinfo("ADDED","CREATED SUCCESSFULLY")
 
 
+    def show_case(number):
+        cell = number + 1
+        CASE_FILES = Frame(CRMS, width=400, height=500, bg="#545454")
+        CASE_FILES.place(x=200, y=150)
+
+        serial_number = data["A"+str(number+1)].value
+        case_number = MD.CTkLabel(CASE_FILES, text=f"CRIME CASE #{serial_number}", font=("Agency FB", 38, "bold"), bg_color="#545454", fg_color="#D9D9D9", corner_radius=7)
+        case_number.place(x=10, y=10)
+
+
+        suspect_name = MD.CTkLabel(CASE_FILES, text="SUSPECT:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        suspect_name.place(x=10, y=60)
+    
+        name_here = MD.CTkLabel(CASE_FILES, text=data["B"+str(cell)].value, font=("Agency FB", 30, "bold"), bg_color="#545454", corner_radius=7)
+        name_here.place(x=110,y=60)
+
+        victims_name = MD.CTkLabel(CASE_FILES, text="VICTIM:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        victims_name.place(x=10, y=100)
+
+        v_name_here = MD.CTkLabel(CASE_FILES, text=data["C"+str(cell)].value, font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        v_name_here.place(x=110, y=100)
+
+        lines = Image.open("photos/linya.PNG")
+        lines = lines.resize((350,1), Image.LANCZOS)
+        lines = ImageTk.PhotoImage(lines)
+
+        lines = Label(CASE_FILES, image=lines)
+        lines.place(x=20, y=150)
+
+        crime_type = MD.CTkLabel(CASE_FILES, text="TYPE OF CRIMES:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        crime_type.place(x=10, y=160)
+
+        crimes = MD.CTkLabel(CASE_FILES, text=data["D"+str(cell)].value, font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        crimes.place(x=15, y=210)
+    
+
+        lines = Image.open("photos/linya.PNG")
+        lines = lines.resize((350,1), Image.LANCZOS)
+        lines = ImageTk.PhotoImage(lines)
+
+        lines = Label(CASE_FILES, image=lines)
+        lines.place(x=20, y=260)
+
+
+        occurence_location = MD.CTkLabel(CASE_FILES, text="LOCATION OF OCCURENCE:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        occurence_location.place(x=10, y=290)
+
+        location_here = MD.CTkLabel(CASE_FILES, text=data["E"+str(cell)].value, font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        location_here.place(x=190, y=290)
+
+        occurence_date = MD.CTkLabel(CASE_FILES, text="DATE OF OCCURENCE:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        occurence_date.place(x=10, y=320)
+
+
+        data_here = MD.CTkLabel(CASE_FILES, text=data["F"+str(cell)].value, font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        data_here.place(x=190, y=320)
+
+        narrative_report = MD.CTkLabel(CASE_FILES, text="NARRATIVE REPORT:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+        narrative_report.place(x=10, y=350)
+
+        box = MD.CTkTextbox(CASE_FILES, width=360, height=70,state=DISABLED)
+        box.place(x=15, y=380)
+
+
+        report = data["G"+str(cell)].value
+
+        box.configure(state=NORMAL)
+        box.insert(1.0, report)
+        box.configure(state=DISABLED)
+
+
+
+        edit_button = MD.CTkButton(CASE_FILES, text="EDIT", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5, command=lambda:edit_case())
+        edit_button.place(x=15, y=455)
+
+        delete_button = MD.CTkButton(CASE_FILES, text="DELETE", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5, command=lambda:delete_record())
+        delete_button.place(x=235, y=455)
+
+        close = MD.CTkButton(CASE_FILES, text="X", width=1, font=("Ariel", 20, "bold"),fg_color="Red",hover="Black",height=1,command=lambda:CASE_FILES.place_forget())
+        close.place(x=380, y=0)
 
 
 
 
-#-----------------------------------------------------------------BACK END-------------------------------------------------
+        def edit_case():
+            name_here.place_forget()
+            v_name_here.place_forget()
+            crimes.place_forget()
+            location_here.place_forget()
+            data_here.place_forget()
+            data_here.place_forget()
+            box.configure(state=NORMAL)
+            box.delete(1.0, END)
+            edit_button.place_forget()
+            delete_button.place_forget()
+
+            edit_s_name = MD.CTkEntry(CASE_FILES,width=250,font=("Agency FB", 30, "bold"))
+            edit_s_name.place(x=110, y=60, relheight=0.07)
+
+            edit_v_name = MD.CTkEntry(CASE_FILES,width=250,font=("Agency FB", 30, "bold"))
+            edit_v_name.place(x=110, y=100,relheight=0.07)
+
+            crimes_type = ["Murder","Manslaughter","Assault","Robbery","Kidnapping","Rape","Domestic Violence","Burgarly","Theft","Larceny","Arson","Fraud","Identity theft","Hacking","Online Fraud"]
+            edit_crimes = StringVar()
+            crimes_widget = MD.CTkOptionMenu(CASE_FILES, values=crimes_type, variable=edit_crimes, fg_color="#545454",font=("Agency FB", 30, "bold"),corner_radius=5, button_color="Black", dropdown_fg_color="White", dropdown_font=("Agency FB", 20, "bold"))
+            crimes_widget.place(x=15, y=210,relheight=0.07)
+
+
+            edit_location = MD.CTkEntry(CASE_FILES,width=200,font=("Agency FB", 30, "bold"))
+            edit_location.place(x=190, y=290,relheight=0.07)
+
+            edit_date = MD.CTkEntry(CASE_FILES,width=200,font=("Agency FB", 30, "bold"))
+            edit_date.place(x=190, y=320, relheight=0.07)
+
+
+            save_button = MD.CTkButton(CASE_FILES, text="SAVE", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5,command=lambda:save())
+            save_button.place(x=15, y=455)
+
+            cancel_button = MD.CTkButton(CASE_FILES, text="CANCEL", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5, command=lambda:cancel())
+            cancel_button.place(x=235, y=455)
+
+
+            edit_s_name.insert(0, data["B"+str(cell)].value)
+            edit_v_name.insert(0,data["C"+str(cell)].value)
+            edit_location.insert(0,data["E"+str(cell)].value)
+            edit_date.insert(0,data["F"+str(cell)].value)
+            box.insert(1.0, data["G"+str(cell)].value)
+
+
+
+            def save():    
+                if len(edit_s_name.get())==0 or len(edit_v_name.get())==0 or edit_crimes.get()==None or len(edit_location.get())==0 or len(edit_date.get())==0:
+                    messagebox.showerror("ERROR","FILL ALL FIELDS")
+
+                else:
+                    values_to_replace=[edit_s_name.get(), edit_v_name.get(), edit_crimes.get(), edit_location.get(), edit_date.get()]
+                    columns = ["B","C","D","E","F"]
+                    for i in range(len(values_to_replace)):
+                        data[columns[i]+str(cell)].value = values_to_replace[i]            
+                    
+                    narrative_info = box.get(1.0, END)
+                    data["G"+str(cell)].value = narrative_info
+
+                    book.save("CRMSDB.xlsx")
+                    messagebox.showinfo("DONE","SAVED SUCCESSFULLY")
+
+
+
+            def cancel():
+                edit_s_name.place_forget()
+                edit_v_name.place_forget()
+                crimes_widget.place_forget()
+                edit_location.place_forget()
+                edit_date.place_forget()
+                save_button.place_forget()
+                cancel_button.place_forget()
+
+
+
+                name_here.place(x=110,y=60)
+                v_name_here.place(x=110, y=100)
+                crimes.place(x=15, y=210)
+                location_here.place(x=190, y=290)
+                data_here.place(x=190, y=320)
+                report = data["G"+str(cell)].value
+                box.configure(state=NORMAL)
+                box.insert(1.0, report)
+                box.configure(state=DISABLED)
+                edit_button.place(x=15, y=455)
+                delete_button.place(x=235, y=455)
+
+
+        def delete_record():
+            if number > 1:
+                data.delete_rows(number+1)
+                book.save("CRMSDB.xlsx")
+                messagebox.showinfo("DONE","RECORD DELETED SUCCESSFULLY")
+                btns[-1].grid_forget()
+                btns.pop()
+
+
+            else:
+                print("you're trying to delete the column names")
+
+
+
+    #length is the numbers of cases inside the database
+    length = data.max_row - 1
+
+    indicator = 0
+
+    own_logo = Image.open("photos/case_logo.png")
+    own_logo = own_logo.resize((115,115), Image.LANCZOS)
+    own_logo = ImageTk.PhotoImage(own_logo)
+
+    #the parameter is divided by 2 since we do not indiscriminately place the widget, since we use
+    #a grid we need to have a griding system where as we limit the column to four and 
+    #and the the number of column inside the row is determine by the algorithm below
+
+
+
+    btns = []
+    a = 0
+    for row in range(length):
+        if indicator != length:
+            for column in range(4):
+                a+=1
+                l = MD.CTkFrame(CASE_CANVAS, width=10, height=1)
+                #l = Button(CASE_CANVAS, text=f"CASE NUMBER# {a}", command=partial(show_case, a))
+                s = MD.CTkButton(l, text=None,image=own_logo, width=10, height=10,fg_color="#545454", hover_color="Red", command=partial(show_case,a))
+                s.pack()
+                
+                case_names = MD.CTkLabel(l, text="CRIME CASE", font=("Agency FB", 20, "bold"))
+                case_names.pack(side=BOTTOM)
+
+
+                l.grid(row=row, column=column, padx=20, pady=20)
+                btns.append(l)
+                indicator += 1
+
+                print(f"row={row}    column={column}")
+                if indicator == length:
+                    break
+
+        else:
+            break
+        
+    print(a)
+
+
+
+    #refreshes the content of the frame
+    def refresh(event):
+        length = data.max_row - 1
+        indicator = 0
+        btns = []
+        a = 0
+        for row in range(length):
+            if indicator != length:
+                for column in range(4):
+                    a+=1
+                    l = MD.CTkFrame(CASE_CANVAS, width=10, height=1)
+                    #l = Button(CASE_CANVAS, text=f"CASE NUMBER# {a}", command=partial(show_case, a))
+                    s = MD.CTkButton(l, text=None,image=own_logo, width=10, height=10,fg_color="#545454", hover_color="Red", command=partial(show_case,a))
+                    s.pack()
+                    
+                    case_names = MD.CTkLabel(l, text="CRIME CASE", font=("Agency FB", 20, "bold"))
+                    case_names.pack(side=BOTTOM)
+
+
+                    l.grid(row=row, column=column, padx=20, pady=20)
+                    btns.append(l)
+                    indicator += 1
+
+                    print(f"row={row}    column={column}")
+                    if indicator == length:
+                        break
+
+            else:
+                break
+
+    def find():
+        if len(search_box.get())==0:
+            messagebox.showerror("ERROR","FILL THE FIELDS")
+        else:
+            value_to_find = search_box.get()
+            
+
+            found = "Hindi"
+            position = 0
+            for i in range(2, data.max_row):
+                if search_box.get() == str(data["A"+str(i)].value):
+                    found = "NAHANAP"
+                    position = i
+                else:
+                    1+1
+            if found == "Hindi":
+                messagebox.showerror("NOT FOUND","DATA DOESNT EXIST")
+            elif found == "NAHANAP":
+                print("found it")
+                GOT = Toplevel()
+                GOT.geometry("400x500")
+                CASE_FILES = Frame(GOT, width=400, height=500, bg="#545454")
+                CASE_FILES.place(x=0, y=0)
+
+                serial_number = search_box.get()
+                case_number = MD.CTkLabel(CASE_FILES, text=f"CRIME CASE #{serial_number}", font=("Agency FB", 38, "bold"), bg_color="#545454", fg_color="#D9D9D9", corner_radius=7)
+                case_number.place(x=10, y=10)
+
+
+                suspect_name = MD.CTkLabel(CASE_FILES, text="SUSPECT:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                suspect_name.place(x=10, y=60)
+            
+                name_here = MD.CTkLabel(CASE_FILES, text=data["B"+str(position)].value, font=("Agency FB", 30, "bold"), bg_color="#545454", corner_radius=7)
+                name_here.place(x=110,y=60)
+
+                victims_name = MD.CTkLabel(CASE_FILES, text="VICTIM:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                victims_name.place(x=10, y=100)
+
+                v_name_here = MD.CTkLabel(CASE_FILES, text=data["C"+str(position)].value, font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                v_name_here.place(x=110, y=100)
+
+                lines = Image.open("photos/linya.PNG")
+                lines = lines.resize((350,1), Image.LANCZOS)
+                lines = ImageTk.PhotoImage(lines)
+
+                lines = Label(CASE_FILES, image=lines)
+                lines.place(x=20, y=150)
+
+                crime_type = MD.CTkLabel(CASE_FILES, text="TYPE OF CRIMES:", font=("Agency FB", 30, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                crime_type.place(x=10, y=160)
+
+                crimes = MD.CTkLabel(CASE_FILES, text=data["D"+str(position)].value, font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                crimes.place(x=15, y=210)
+            
+
+                lines = Image.open("photos/linya.PNG")
+                lines = lines.resize((350,1), Image.LANCZOS)
+                lines = ImageTk.PhotoImage(lines)
+
+                lines = Label(CASE_FILES, image=lines)
+                lines.place(x=20, y=260)
+
+
+                occurence_location = MD.CTkLabel(CASE_FILES, text="LOCATION OF OCCURENCE:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                occurence_location.place(x=10, y=290)
+
+                location_here = MD.CTkLabel(CASE_FILES, text=data["E"+str(position)].value, font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                location_here.place(x=190, y=290)
+
+                occurence_date = MD.CTkLabel(CASE_FILES, text="DATE OF OCCURENCE:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                occurence_date.place(x=10, y=320)
+
+
+                data_here = MD.CTkLabel(CASE_FILES, text=data["F"+str(position)].value, font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                data_here.place(x=190, y=320)
+
+                narrative_report = MD.CTkLabel(CASE_FILES, text="NARRATIVE REPORT:", font=("Agency FB", 20, "bold"), bg_color="#545454", fg_color="#545454", corner_radius=7)
+                narrative_report.place(x=10, y=350)
+
+                box = MD.CTkTextbox(CASE_FILES, width=360, height=70,state=DISABLED)
+                box.place(x=15, y=380)
+
+
+                report = data["G"+str(position)].value
+
+                box.configure(state=NORMAL)
+                box.insert(1.0, report)
+                box.configure(state=DISABLED)
+
+
+
+                edit_button = MD.CTkButton(CASE_FILES, text="EDIT", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5, command=lambda:edit_searched_case())
+                edit_button.place(x=15, y=455)
+
+                delete_button = MD.CTkButton(CASE_FILES, text="DELETE", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5)
+                delete_button.place(x=235, y=455)
+
+                close = MD.CTkButton(CASE_FILES, text="X", width=1, font=("Ariel", 20, "bold"),fg_color="Red",hover="Black",height=1,command=lambda:GOT.withdraw())
+                close.place(x=380, y=0)
+
+                def edit_searched_case():
+                    name_here.place_forget()
+                    v_name_here.place_forget()
+                    crimes.place_forget()
+                    location_here.place_forget()
+                    data_here.place_forget()
+                    data_here.place_forget()
+                    box.configure(state=NORMAL)
+                    box.delete(1.0, END)
+                    edit_button.place_forget()
+                    delete_button.place_forget()
+
+                    edit_s_name = MD.CTkEntry(CASE_FILES,width=250,font=("Agency FB", 30, "bold"))
+                    edit_s_name.place(x=110, y=60, relheight=0.07)
+
+                    edit_v_name = MD.CTkEntry(CASE_FILES,width=250,font=("Agency FB", 30, "bold"))
+                    edit_v_name.place(x=110, y=100,relheight=0.07)
+
+                    crimes_type = ["Murder","Manslaughter","Assault","Robbery","Kidnapping","Rape","Domestic Violence","Burgarly","Theft","Larceny","Arson","Fraud","Identity theft","Hacking","Online Fraud"]
+                    edit_crimes = StringVar()
+                    crimes_widget = MD.CTkOptionMenu(CASE_FILES,values=crimes_type, variable=edit_crimes, fg_color="#545454",font=("Agency FB", 30, "bold"),corner_radius=5, button_color="Black", dropdown_fg_color="White", dropdown_font=("Agency FB", 20, "bold"))
+                    crimes_widget.place(x=15, y=210,relheight=0.07)
+
+
+                    edit_location = MD.CTkEntry(CASE_FILES,width=200,font=("Agency FB", 30, "bold"))
+                    edit_location.place(x=190, y=290,relheight=0.07)
+
+                    edit_date = MD.CTkEntry(CASE_FILES,width=200,font=("Agency FB", 30, "bold"))
+                    edit_date.place(x=190, y=320, relheight=0.07)
+
+
+                    save_button = MD.CTkButton(CASE_FILES, text="SAVE", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5,command=lambda:save_searched_case())
+                    save_button.place(x=15, y=455)
+
+                    cancel_button = MD.CTkButton(CASE_FILES, text="CANCEL", font=("Agency FB", 30, "bold"), text_color="Black",bg_color="#545454", fg_color="#D9D9D9", corner_radius=5, command=lambda:cancel_searched_case())
+                    cancel_button.place(x=235, y=455)
+
+
+                    edit_s_name.insert(0, data["B"+str(position)].value)
+                    edit_v_name.insert(0,data["C"+str(position)].value)
+                    edit_location.insert(0,data["E"+str(position)].value)
+                    edit_date.insert(0,data["F"+str(position)].value)
+                    box.insert(1.0, data["G"+str(position)].value)
+
+                    def save_searched_case():
+                        if len(edit_s_name.get())==0 or len(edit_v_name.get())==0 or edit_crimes.get()==None or len(edit_location.get())==0 or len(edit_date.get())==0:
+                            messagebox.showerror("ERROR","FILL ALL FIELDS")
+
+                        else:
+                            values_to_replace=[edit_s_name.get(), edit_v_name.get(), edit_crimes.get(), edit_location.get(), edit_date.get()]
+                            columns = ["B","C","D","E","F"]
+                            for i in range(len(values_to_replace)):
+                                data[columns[i]+str(position)].value = values_to_replace[i]            
+                            
+                            narrative_info = box.get(1.0, END)
+                            data["G"+str(position)].value = narrative_info
+
+                            book.save("CRMSDB.xlsx")
+                            messagebox.showinfo("DONE","SAVED SUCCESSFULLY")
+
+
+
+
+                    def cancel_searched_case():
+                        edit_s_name.place_forget()
+                        edit_v_name.place_forget()
+                        crimes_widget.place_forget()
+                        edit_location.place_forget()
+                        edit_date.place_forget()
+                        save_button.place_forget()
+                        cancel_button.place_forget()
+
+
+
+                        name_here.place(x=110,y=60)
+                        v_name_here.place(x=110, y=100)
+                        crimes.place(x=15, y=210)
+                        location_here.place(x=190, y=290)
+                        data_here.place(x=190, y=320)
+                        edit_button.place(x=15, y=455)
+                        delete_button.place(x=235, y=455)
+
+
+    global info_frame_logo
+    info_frame_logo = Image.open("photos/info_logo.png")
+    info_frame_logo = info_frame_logo.resize((60,60), Image.LANCZOS)
+    info_frame_logo = ImageTk.PhotoImage(info_frame_logo)
+
+
+    PHOTO = Label(INFO_FRAME, image=info_frame_logo,bg="#A6A6A6")
+    PHOTO.place(x=25, y=30)
+
+    info_system = Label(INFO_FRAME, text="CRIME RECORD MANAGEMENT SYSTEM", bg="#A6A6A6", fg="Black",font=("Agency FB", 16, "bold"))
+    info_system.place(x=95, y=45)
+
+
+    sentence = f"""
+
+    The crime record management 
+    system is a sophisticated software
+    tool designed to effectively organize
+    and maintain crime records,
+    facilitating law enforcement agencies
+    in their efforts to combat 
+    crime, analyze trends, and ensure 
+    public safety.
+
+    """
+
+    introduction = Label(INFO_FRAME, text=sentence, height=10,font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+    introduction.place(x=7, y=120)
+    
+
+    profile_photo = MD.CTkLabel(CRMS, text=None,image=avatar)
+    profile_photo.place(x=920, y=55)
+
+
+    title = Label(INFO_FRAME, text="PROFILE",font=("Agency FB", 30, "bold"),bg="#A6A6A6")
+
+    show_name = Label(INFO_FRAME, text="NAME:",font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+    show_id = Label(INFO_FRAME, text="USER ID:",font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+    show_email = Label(INFO_FRAME, text="EMAIL:",font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+    show_phone_number = Label(INFO_FRAME, text="PHONE NUMBER:", font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+    
+    data_show_name = Label(INFO_FRAME, text=LOG_IN["C"+str(LOGGED_ON_USER)].value,font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+    data_show_id = Label(INFO_FRAME, text=LOG_IN["A"+str(LOGGED_ON_USER)].value,font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+    data_show_email = Label(INFO_FRAME, text=LOG_IN["E"+str(LOGGED_ON_USER)].value,font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+    data_show_phone = Label(INFO_FRAME, text=LOG_IN["D"+str(LOGGED_ON_USER)].value,font=("Agency FB", 20, "bold"),bg="#A6A6A6")
+
+
+    def user_info(event):
+        introduction.place_forget()
+
+        title.place(x=130, y=80)
+
+        show_name.place(x=20, y=160)
+        show_id.place(x=20, y=200)
+        show_email.place(x=20, y=240)
+        show_phone_number.place(x=20, y=280)
+
+        data_show_name.place(x=170, y=160)
+        data_show_id.place(x=170, y=200)
+        data_show_email.place(x=170,y=240)
+        data_show_phone.place(x=170, y=280)
+
+
+    def hide_info(event):
+        introduction.place(x=7, y=120)
+
+        title.place_forget()
+        show_name.place_forget()
+        show_id.place_forget()
+        show_email.place_forget()
+        show_phone_number.place_forget()
+
+        data_show_name.place_forget()
+        data_show_id.place_forget()
+        data_show_email.place_forget()
+        data_show_phone.place_forget()
+
+
+
+    profile_photo.bind("<Enter>", user_info)
+    profile_photo.bind("<Leave>", hide_info)
+
+
+#----------------------------------------------------------------MAIN INTERFACE----------------------------------------
 
 
 
